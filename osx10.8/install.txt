@@ -1,0 +1,96 @@
+Install instructions for OSX 10.8 (Mountain Lion)
+=================================================
+
+1) Install Xcode (available from Mac App Store) or the Xcode commandline tools (available from https://developer.apple.com/resources/). If you install Xcode ensure you have also installed the commandline tools by launching Xcode then going to Preferences, selecting the Downloads tab and clicking the 'Install' button for 'Command Line Tools'.
+
+2) Install homebrew package manager (http://mxcl.github.com/homebrew/):
+
+> ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+> brew doctor
+> brew update
+
+3) Install non-python dependencies (and pil) via homebrew:
+
+> brew install git gfortran python
+> brew install geos graphviz hdf5 jasper netcdf pil proj udunits
+
+4) Create a python virtual environment (these instructions use the name 'scitools'):
+
+> curl -O https://raw.github.com/pypa/virtualenv/master/virtualenv.py
+> python virtualenv.py scitools
+
+5) Activate the new virtual environment (all that follows must be done in the activated virtual environment):
+
+> source scitools/bin/activate
+
+6) Install python dependencies into the new virtual environment:
+
+> pip install nose cython pyshp shapely pil pep8 mock pyke sphinx
+> pip install numpy
+> pip install netCDF
+> pip install scipy
+
+7) Install matplotlib from source into the virtual environment:
+
+> curl -O -L https://github.com/downloads/matplotlib/matplotlib/matplotlib-1.2.0.tar.gz
+> tar -xvf matplotlib-1.2.0.tar.gz
+> cd matplotlib-1.2.0
+> python setup.py install
+> cd ..
+
+8) Install GRIB API (optional):
+
+i) Download and unpack:
+> curl -O  -L https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-1.9.18.tar.gz
+> tar -xvf grib_api-1.9.18.tar.gz
+> cd grib_api-1.9.18
+
+ii) Apply patch for building (patch file is along side this install.txt file):
+> patch -p1 < ../grib_api-1.9.18_osx10.8.patch
+
+iii) Apply patch for negative forecast time (optional):
+> patch -p1 < ../grib_api-1.9.18_negativeforecastTime.patch
+
+iv) Create a link to python-config in the virtual environment:
+> ln -s /usr/local/bin/python-config ~/scitools/bin
+
+v) Build and install to virtual environment:
+> ./configure --prefix=$HOME/scitools --enable-python
+> make
+> make install
+> cd ..
+
+vi) Add .pth file to virtualenv's site-packages so that 'import gribapi' works:
+> echo grib_api > ~/scitools/lib/python2.7/site-packages/gribapi.pth
+
+9) Install PP packing library (optional):
+
+i) Download and unpack:
+> curl -O -L https://puma.nerc.ac.uk/trac/UM_TOOLS/raw-attachment/wiki/unpack/unpack-030712.tgz
+> tar -xvf unpack-030712.tgz
+> cd unpack-030712
+
+ii) Apply patch for building:
+> patch -p1 < ../unpack-030712_osx10.8.patch
+
+ii) Build and install into virtual environment:
+> cd libmo_unpack
+> ./make_library
+> ./distribute.sh ~/scitools
+> cd ../..
+
+10) Install Cartopy:
+> git clone https://github.com/SciTools/cartopy.git
+> cd cartopy
+> python setup.py install
+> cd ..
+
+11) Install Iris:
+> git clone https://github.com/SciTools/iris.git
+> cd iris
+> python setup.py install
+> cd ..
+
+For development of cartopy and/or Iris fork the repositories on github, clone your fork, add upstream remotes,
+and consider inplace builds and the use of .pth files in ~/moscitools/lib/python2.7/site-packages/
+
