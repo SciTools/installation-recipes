@@ -88,7 +88,7 @@ ii) Build and install into virtual environment:
 11) Install Iris:
 > git clone https://github.com/SciTools/iris.git
 > cd iris
-> python setup.py install
+> python setup.py --with-unpack install
 > cd ..
 
 For development of cartopy and/or Iris fork the repositories on github, clone your fork, add upstream remotes,
