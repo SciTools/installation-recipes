@@ -1,0 +1,10 @@
+diff -rupN grib_api-1.9.18/definitions/grib2/template.4.parameter.def grib_api-1.9.18_fixed/definitions/grib2/template.4.parameter.def
+--- grib_api-1.9.18/definitions/grib2/template.4.parameter.def	2012-10-11 18:00:59.000000000 +0100
++++ grib_api-1.9.18_fixed/definitions/grib2/template.4.parameter.def	2012-12-13 13:34:59.000000000 +0000
+@@ -42,5 +42,5 @@ codetable[1] indicatorOfUnitOfTimeRange 
+ codetable[1] stepUnits 'stepUnits.table' = 1 : transient,dump,no_copy;
+ 
+ #  Forecast time in units defined by octet 18
+-unsigned[4] forecastTime  : dump;
++signed[4] forecastTime  : dump;
+ 
