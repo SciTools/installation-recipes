@@ -1,0 +1,69 @@
+Install instructions for Arch Linux
+===================================
+
+1) Install dependencies available in central repositories (as root):
+pacman -S python2 git proj geos netcdf hdf5 openjpeg gcc-fortran python2-matplotlib pygtk tk python2-scipy python2-nose python2-sphinx cython2
+
+2) Build and install dependencies available in AUR repository:
+
+i) Install build dependencies (as root):
+pacman -S base-devel
+
+ii) As a normal user create build directory and build the udunits package using makepkg:
+mkdir src
+cd src
+curl -L -O https://aur.archlinux.org/packages/ud/udunits/udunits.tar.gz
+tar -xvf udunits.tar.gz
+cd udunits
+makepkg -s
+
+iii) As root add '--insecure' option to http curl DLAGENT entry in /etc/makepkg.conf to get around certificate error when downloading grib_api
+
+iv) As a normal user build the grib_api package using makepkg:
+cd ~/src
+curl -L -O https://aur.archlinux.org/packages/gr/grib_api/grib_api.tar.gz
+tar -xvf grib_api.tar.gz
+cd grib_api
+makepkg -s
+
+v) As root remove '--insecure' option from http curl DLAGENT entry in /etc/makepkg.conf
+
+vi) Install built packages (as root):
+pacman -U /path/to/src/udunits/udunits*xz
+pacman -U /path/to/src/grib_api/grib_api*xz
+echo grib_api > /usr/lib/python2.7/site-packages/gribapi.pth
+
+3) Install additional python packages using pip (as root):
+pacman -S python2-pip
+pip-2.7 install shapely mock pyke netCDF4 pyshp
+
+4) Build PP packing library as normal user (optional):
+cd ~/src
+curl -O -L https://puma.nerc.ac.uk/trac/UM_TOOLS/raw-attachment/wiki/unpack/unpack-030712.tgz
+tar -xvf unpack-030712.tgz
+cd unpack-030712
+cd libmo_unpack
+./make_library
+
+5) Install PP packing library (optional):
+
+i) Run install script (as root):
+cd /path/to/src/unpack-030712/lib_mo_unpack/
+./distribute.sh /usr/local
+
+ii) Add /usr/local/lib to the path searched py ldconfig and run ldconfig (as root):
+echo /usr/local/lib > /etc/ld.so.conf.d/usrlocal.conf
+ldconfig
+
+6) Install Cartopy (as normal user):
+cd ~/src
+git clone https://github.com/SciTools/cartopy.git
+cd cartopy
+python2 setup.py install --user
+
+7) Install Iris (as normal user):
+cd ~/src
+git clone https://github.com/SciTools/iris.git
+cd iris
+python2 setup.py --with-unpack install --user
+
