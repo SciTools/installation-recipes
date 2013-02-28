@@ -1,0 +1,42 @@
+Install instructions for Ubuntu Linux 12.10
+===========================================
+
+1) Install dependencies available in central repositories (via sudo):
+sudo apt-get install git libhdf5-dev libnetcdf-dev libudunits2-dev libgeos-dev libproj-dev libjasper-dev libfreetype6-dev libpng-dev tk-dev python-tk cython python-scipy python-nose python-pyke python-mock python-sphinx python-shapely python-pip
+
+2) Install additional python packages using pip (via sudo):
+sudo pip install netCDF4 pyshp matplotlib
+
+3) Build and install grib_api (optional):
+mkdir src
+cd src
+wget --no-check-certificate https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-1.9.16.tar.gz
+tar -xvf grib_api-1.9.16.tar.gz
+cd grib_api-1.9.16
+./configure --enable-python
+make
+sudo make install
+echo /usr/local/lib/python2.7/site-packages/grib_api > gribapi.pth
+sudo cp griapi.pth /usr/local/lib/python2.7/dist-packages/
+
+4) Build and install PP packing library (optional):
+cd ~/src
+wget https://puma.nerc.ac.uk/trac/UM_TOOLS/raw-attachment/wiki/unpack/unpack-030712.tgz
+tar -xvf unpack-030712.tgz
+cd unpack-030712
+cd libmo_unpack
+bash ./make_library
+sudo ./distribute.sh /usr/local
+
+5) Install Cartopy (as normal user):
+cd ~/src
+git clone https://github.com/SciTools/cartopy.git
+cd cartopy
+python setup.py install --user
+
+6) Install Iris (as normal user):
+cd ~/src
+git clone https://github.com/SciTools/iris.git
+cd iris
+python setup.py --with-unpack install --user
+
