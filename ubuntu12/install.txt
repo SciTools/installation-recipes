@@ -2,7 +2,9 @@ Install instructions for Ubuntu Linux 12.10
 ===========================================
 
 1) Install dependencies available in central repositories (via sudo):
-sudo apt-get install git libhdf5-dev libnetcdf-dev libudunits2-dev libgeos-dev libproj-dev libjasper-dev libfreetype6-dev libpng-dev tk-dev python-tk cython python-scipy python-nose python-pyke python-mock python-sphinx python-shapely python-pip
+sudo apt-get install git libhdf5-serial-dev libnetcdf-dev libudunits2-dev libgeos-dev libproj-dev \
+                     libjasper-dev libfreetype6-dev libpng-dev tk-dev python-tk cython python-scipy \
+                     python-nose python-pyke python-mock python-sphinx python-shapely python-pip
 
 2) Install additional python packages using pip (via sudo):
 sudo pip install netCDF4 pyshp matplotlib
@@ -17,16 +19,31 @@ cd grib_api-1.9.16
 make
 sudo make install
 echo /usr/local/lib/python2.7/site-packages/grib_api > gribapi.pth
-sudo cp griapi.pth /usr/local/lib/python2.7/dist-packages/
+sudo cp gribapi.pth /usr/local/lib/python2.7/dist-packages/
 
-4) Build and install PP packing library (optional):
+4) Build and install the PP packing library (optional):
+i) Build the library:
 cd ~/src
 wget https://puma.nerc.ac.uk/trac/UM_TOOLS/raw-attachment/wiki/unpack/unpack-030712.tgz
 tar -xvf unpack-030712.tgz
 cd unpack-030712
 cd libmo_unpack
 bash ./make_library
+
+NOTE: On some machines the linking step fails with an error relating to gcc's stack smashing protection.
+      If this occurs use gcc for linking and create the necessary symbolic links with the following commands:
+
+      gcc -shared -Wl,-soname,libmo_unpack.so.2 -o lib/libmo_unpack.so.2.0.1 *.o
+      cd lib
+      rm libmo_unpack.so.2.0 libmo_unpack.so.2 libmo_unpack.so
+      ln -s libmo_unpack.so.2.0.1 libmo_unpack.so.2.0
+      ln -s libmo_unpack.so.2.0 libmo_unpack.so.2
+      ln -s libmo_unpack.so.2 libmo_unpack.so
+      cd ..
+
+ii) Install the library and run ldconfig:
 sudo ./distribute.sh /usr/local
+sudo ldconfig
 
 5) Install Cartopy (as normal user):
 cd ~/src
