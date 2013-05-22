@@ -27,18 +27,11 @@ Install instructions for OSX 10.8 (Mountain Lion)
 
 > pip install nose cython pyshp shapely pil pep8 mock pyke sphinx
 > pip install numpy
-> pip install netCDF
+> pip install netCDF4
 > pip install scipy
+> pip install matplotlib
 
-7) Install matplotlib from source into the virtual environment:
-
-> curl -O -L https://github.com/downloads/matplotlib/matplotlib/matplotlib-1.2.0.tar.gz
-> tar -xvf matplotlib-1.2.0.tar.gz
-> cd matplotlib-1.2.0
-> python setup.py install
-> cd ..
-
-8) Install GRIB API (optional):
+7) Install GRIB API (optional):
 
 i) Download and unpack:
 > curl -O  -L https://software.ecmwf.int/wiki/download/attachments/3473437/grib_api-1.9.18.tar.gz
@@ -48,10 +41,7 @@ i) Download and unpack:
 ii) Apply patch for building (patch file is along side this install.txt file):
 > patch -p1 < ../grib_api-1.9.18_osx10.8.patch
 
-iii) Apply patch for negative forecast time (optional):
-> patch -p1 < ../grib_api-1.9.18_negativeforecastTime.patch
-
-iv) Create a link to python-config in the virtual environment:
+iii) Create a link to python-config in the virtual environment:
 > ln -s /usr/local/bin/python-config ~/scitools/bin
 
 v) Build and install to virtual environment:
@@ -63,7 +53,7 @@ v) Build and install to virtual environment:
 vi) Add .pth file to virtualenv's site-packages so that 'import gribapi' works:
 > echo grib_api > ~/scitools/lib/python2.7/site-packages/gribapi.pth
 
-9) Install PP packing library (optional):
+8) Install PP packing library (optional):
 
 i) Download and unpack:
 > curl -O -L https://puma.nerc.ac.uk/trac/UM_TOOLS/raw-attachment/wiki/unpack/unpack-030712.tgz
@@ -79,18 +69,19 @@ ii) Build and install into virtual environment:
 > ./distribute.sh ~/scitools
 > cd ../..
 
-10) Install Cartopy:
+9) Install Cartopy:
 > git clone https://github.com/SciTools/cartopy.git
 > cd cartopy
 > python setup.py install
 > cd ..
 
-11) Install Iris:
+10) Install Iris:
 > git clone https://github.com/SciTools/iris.git
 > cd iris
+> python setup.py --with-unpack build_ext --inplace -I$HOME/scitools/include -L$HOME/scitools/lib
 > python setup.py --with-unpack install
 > cd ..
 
 For development of cartopy and/or Iris fork the repositories on github, clone your fork, add upstream remotes,
-and consider inplace builds and the use of .pth files in ~/moscitools/lib/python2.7/site-packages/
+and consider inplace builds and the use of .pth files in ~/scitools/lib/python2.7/site-packages/
 
