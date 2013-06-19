@@ -1,0 +1,12 @@
+diff -rupN unpack-030712/libmo_unpack/make_library unpack-030712_fixed/libmo_unpack/make_library
+--- unpack-030712/libmo_unpack/make_library	2012-05-03 14:50:27.000000000 +0100
++++ unpack-030712_fixed/libmo_unpack/make_library	2013-06-18 14:23:48.654991150 +0100
+@@ -41,7 +41,7 @@ then
+ elif [ "_$os" == "_Linux" ]
+ then
+   CC=gcc
+-  LD="ld -shared -soname libmo_unpack.so.$major"
++  LD="gcc -shared -Wl,-soname,libmo_unpack.so.$major"
+   AR="ar"
+   OPTS="-O4 -mfpmath=sse -msse -I include -D_LARGEFILE_SOURCE -D_LARGEFILE_SOURCE64 -D_FILE_OFFSET_BITS=64"
+   LDOPTS=""
