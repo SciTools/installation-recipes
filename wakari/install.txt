@@ -1,0 +1,55 @@
+Install instructions for Wakari (https://www.wakari.io/)
+========================================================
+
+1) Create a shell terminal using the "np17py27-1.5" environment, and then in that terminal, type:
+conda create -n scitools dateutil=1.5 pandas matplotlib netcdf4 ipython shapely cython pip pytz scipy lxml nose sphinx hdf5 zlib curl distribute libpng pyzmq
+
+2) Log out and in again to make the new "scitools" environment available.
+
+3) Create a new shell terminal, making sure to select the "scitools" environment.
+
+4) Install additional python packages using pip:
+pip install pyshp pyke
+
+5) Build and install proj4:
+mkdir src
+cd src
+wget http://download.osgeo.org/proj/proj-4.8.0.tar.gz
+tar xvfz proj-4.8.0.tar.gz
+cd proj-4.8.0
+./configure --prefix=/opt/anaconda/envs/scitools
+make; make install
+
+6) Build and install udunits as a two step process to get around libexpat.so linking issue:
+i) Initial install:
+cd ~/src
+wget ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.1.24.tar.gz
+tar xzvf udunits-2.1.24.tar.gz
+cd udunits-2.1.24
+./configure --prefix=/opt/anaconda/envs/scitools
+make; make install
+ii) Edit line 220 of lib/Makefile so that it reads:
+LDFLAGS = -L/opt/anaconda/envs/scitools/lib
+ii) Edit line 226 of lib/Makefile so that it reads:
+LIBS = -lm -lexpat
+iii) Build and install again (linking to expat):
+make clean; make; make install
+
+7) Install Cartopy:
+cd ~/src
+wget -O cartopy.v0.9.0.tgz https://github.com/SciTools/cartopy/archive/v0.9.0.tar.gz
+tar xvfz cartopy.v0.9.0.tgz
+cd cartopy-0.9.0
+python setup.py install
+
+8) Install Iris:
+i) Download and extract:
+cd ~/src
+wget -O iris.v1.5.1.tgz https://github.com/SciTools/iris/archive/v1.5.1.tar.gz
+tar xvfz iris.v1.5.1.tgz
+cd iris-1.5.1
+ii) Create ~/src/iris-1.5.1/lib/iris/etc/site.cfg with the following contents:
+[System]
+udunits2_path = /opt/anaconda/envs/scitools/lib/libudunits2.so
+iii) Build and install:
+python setup.py install
