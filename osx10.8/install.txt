@@ -12,8 +12,9 @@ brew update
 brew install git gfortran python geos graphviz hdf5 jasper netcdf pil proj udunits
 
 4) Create a python virtual environment (these instructions use the name 'scitools'):
-curl -O https://raw.github.com/pypa/virtualenv/master/virtualenv.py
-python virtualenv.py scitools
+curl -O -L https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.11.5.tar.gz
+tar -zxvf virtualenv-1.11.5.tar.gz
+python virtualenv-1.11.5/virtualenv.py scitools
 
 5) Activate the new virtual environment (all that follows must be done in the activated virtual environment):
 source scitools/bin/activate
@@ -24,6 +25,8 @@ pip install numpy
 pip install netCDF4
 pip install scipy
 pip install matplotlib
+pip install owslib
+pip install biggus
 
 7) Install GRIB API (optional):
 
